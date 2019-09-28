@@ -38,6 +38,8 @@ namespace todo
 
             services.AddDbContext<todoContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("todoContext")));
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +64,11 @@ namespace todo
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<Hubs.SignalRTasks>("/SignalRTasks");
             });
         }
     }

@@ -30,10 +30,14 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <input id="submit" type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+<div id="messages">
+</div>
+<script src="~/lib/@@aspnet/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/site_insert_delete_update_task.js"></script>
