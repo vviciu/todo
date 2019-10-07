@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace todo.Models
 {
-    public class Task
+    public class Task //RH: TO widziałbym razem z kontekstem w oddzielnym projekcie i opatrzone jakimś interfejsem.
     {
         public int Id { get; set; }
         public string Name { get; set; }

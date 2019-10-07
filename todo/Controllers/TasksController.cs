@@ -21,7 +21,7 @@ namespace todo.Controllers
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Task.ToListAsync());
+            return View(await _context.Task.ToListAsync()); //RH: Brak AsNoTracking
         }
 
         // GET: Tasks/Details/5
@@ -59,7 +59,7 @@ namespace todo.Controllers
             {
                 _context.Add(task);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); //RG: Duży plus za nameof! 
             }
             return View(task);
         }
@@ -69,7 +69,7 @@ namespace todo.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); //RH: Można spróbować nie nullowalny int w parametrze i obsłużyć to routingiem
             }
 
             var task = await _context.Task.FindAsync(id);
@@ -103,11 +103,13 @@ namespace todo.Controllers
                 {
                     if (!TaskExists(task.Id))
                     {
+                        //RH:
+                        //return Conflict();
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        throw; //RH: Pocyztaj o różnicy między throw a throw ex
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -144,7 +146,7 @@ namespace todo.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TaskExists(int id)
+        private bool TaskExists(int id) //RH: Raczej nie powinno to być w kontrolerze.
         {
             return _context.Task.Any(e => e.Id == id);
         }

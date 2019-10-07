@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace todo.Controllers
 {
     [Route("api/[controller]")]
-    public class ApiTasksController : Controller
+    public class ApiTasksController : Controller //RH: Przy podziale kontrolerów na API/MVC lepszy byłby namespace i Folder np. todo.Controllers.API
     {
         private readonly Models.todoContext _context;
 
@@ -21,9 +21,9 @@ namespace todo.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Models.Task> Get()
+        public IEnumerable<Models.Task> Get() //RH: Nazwa Task koliduje z Task z .NETa
         {
-            return _context.Task.ToList();
+            return _context.Task.ToList(); //RH: Brakuje AsNoTracking()
         }
 
         // GET api/<controller>/5
@@ -33,7 +33,7 @@ namespace todo.Controllers
             var task = _context.Task.FirstOrDefault(m => m.Id == id);
             if (task == null)
             {
-                return null;
+                return null; //RH: Jeśli jest nullem to i tak zwróci nulla
             }
             return task;
         }
@@ -43,7 +43,7 @@ namespace todo.Controllers
         public void Post([FromBody]Models.Task task)
         {
             _context.Task.Add(task);
-            _context.SaveChangesAsync();
+            _context.SaveChangesAsync(); //RH: To jest nigdzie nie awaitowany Async, w razie problemów nie złapiesz wyjątków w żaden sposób
         }
 
         // PUT api/<controller>/5
@@ -56,7 +56,7 @@ namespace todo.Controllers
                 taskToUpdate.Name = task.Name;
                 taskToUpdate.Description = task.Description;
                 taskToUpdate.DeadlineDate = task.DeadlineDate;
-                _context.SaveChangesAsync();
+                _context.SaveChangesAsync(); //RH: jw.
             }
         }
 
@@ -66,7 +66,7 @@ namespace todo.Controllers
         {
             var task = _context.Task.Find(id);
             _context.Task.Remove(task);
-            _context.SaveChangesAsync();
+            _context.SaveChangesAsync(); //RH: jw.
         }
     }
 }

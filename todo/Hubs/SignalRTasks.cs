@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace todo.Hubs
 {
-    public class SignalRTasks : Hub
+    public class SignalRTasks : Hub //RH: Standardowa konwencja w przypadku Hubów jest analogiczna do kontrolerów więc sugerowałbym TasksHub
     {
-        public async Task SendMessageToRefreshTableWithTasks(string komunikat)
+        public async Task SendMessageToRefreshTableWithTasks(string komunikat) //RH: Polska zmienna? Nieładnie ;)
         {
             await Clients.All.SendAsync("ReceiveMessageToRefreshTableWithTasks", komunikat);
         }
