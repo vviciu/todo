@@ -1,5 +1,5 @@
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/SignalRTasks")
+    .withUrl("/TasksHub")
     //.configureLogging(signalR.LogLevel.Information)
     .build();
 
@@ -21,7 +21,7 @@ function appendLine(massage) {
     $.ajax({
         contentType: 'application/json',
         type: 'GET',
-        url: 'api/ApiTasks',
+        url: 'api/Tasks',
         dataType: "json",
         success: function (data, textStatus, jqXHR) {
             messages.innerHTML += "<br/>Reading data Start...";

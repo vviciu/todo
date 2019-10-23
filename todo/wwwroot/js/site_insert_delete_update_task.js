@@ -1,5 +1,5 @@
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/SignalRTasks")
+    .withUrl("/TasksHub")
     //.configureLogging(signalR.LogLevel.Information)
     .build();
 

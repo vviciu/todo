@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using todo.Models;
+using Todo.Model.Models;
+using Todo.Model.Data;
 
 namespace todo
 {
@@ -36,7 +37,7 @@ namespace todo
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<todoContext>(options =>
+            services.AddDbContext<TodoContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("todoContext")));
 
             services.AddSignalR();
@@ -68,7 +69,7 @@ namespace todo
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<Hubs.SignalRTasks>("/SignalRTasks");
+                routes.MapHub<Hubs.TasksHub>("/TasksHub");
             });
         }
     }
