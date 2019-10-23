@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace todo.Models
+namespace Todo.Model.Models
 {
-    public class Task //RH: TO widziałbym razem z kontekstem w oddzielnym projekcie i opatrzone jakimś interfejsem.
+    public class Task : ITask
+    //RH: TO widziałbym razem z kontekstem w oddzielnym projekcie i opatrzone jakimś interfejsem.
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using todo.Models;
+using todo.Helpers;
+using Todo.Model.Data;
 
 namespace todo.Controllers
 {
     public class TasksController : Controller
     {
-        private readonly todoContext _context;
+        private readonly TodoContext _context;
 
-        public TasksController(todoContext context)
+        public TasksController(TodoContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace todo.Controllers
         // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Task.ToListAsync()); //RH: Brak AsNoTracking
+            return View(await _context.Task.AsNoTracking().ToListAsync()); //RH: Brak AsNoTracking
         }
 
         // GET: Tasks/Details/5
@@ -53,7 +54,7 @@ namespace todo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DeadlineDate,Description")] Models.Task task)
+        public async Task<IActionResult> Create([Bind("Id,Name,DeadlineDate,Description")] Todo.Model.Models.Task task)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +86,7 @@ namespace todo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DeadlineDate,Description")] Models.Task task)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DeadlineDate,Description")] Todo.Model.Models.Task task)
         {
             if (id != task.Id)
             {
@@ -99,17 +100,18 @@ namespace todo.Controllers
                     _context.Update(task);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!TaskExists(task.Id))
+                    if (!Utils.TaskExists(task.Id, _context))
                     {
                         //RH:
                         //return Conflict();
-                        return NotFound();
+                        //return NotFound();
+                        return Conflict(new { message = $"Record '{id}' was not found." });
                     }
                     else
                     {
-                        throw; //RH: Pocyztaj o różnicy między throw a throw ex
+                        throw ex; //RH: Pocyztaj o różnicy między throw a throw ex
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -144,11 +146,6 @@ namespace todo.Controllers
             _context.Task.Remove(task);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TaskExists(int id) //RH: Raczej nie powinno to być w kontrolerze.
-        {
-            return _context.Task.Any(e => e.Id == id);
         }
     }
 }
